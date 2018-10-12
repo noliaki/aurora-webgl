@@ -1,0 +1,13 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint-config-standard"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-unused-variable": true,
+    "no-unused-expression": true,
+    "one-variable-per-declaration": [true, "ignore-for-loop"]
+  },
+  "rulesDirectory": []
+}
