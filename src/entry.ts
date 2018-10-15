@@ -1,12 +1,9 @@
 import * as THREE from 'three'
 
-import vertexShader from './vertex-shader.vs'
 import perlinNoise from './perlin-noise.fs'
 import fragmentShader from './fragment-shader.fs'
 
 const container: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement
-container.width = window.innerWidth
-container.height = window.innerHeight
 
 const camera: THREE.Camera = new THREE.Camera()
 camera.position.z = 1
@@ -22,13 +19,14 @@ const uniforms = {
 
 const material: THREE.ShaderMaterial = new THREE.ShaderMaterial({
   uniforms: uniforms,
-  vertexShader: vertexShader,
-  fragmentShader: perlinNoise + fragmentShader
+  fragmentShader: [
+    perlinNoise,
+    fragmentShader
+  ].join('\n')
 })
 
 const mesh: THREE.Mesh = new THREE.Mesh(geometry, material)
 
-scene.add(mesh)
 const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
   canvas: container
 })
@@ -37,23 +35,25 @@ let mouseY: number = 0
 let mouseX: number = 0
 
 renderer.setSize(renderer.domElement.width, renderer.domElement.height)
-uniforms.u_resolution.value.x = renderer.domElement.width
-uniforms.u_resolution.value.y = renderer.domElement.height
 
-window.addEventListener('resize', () => {
-  container.width = window.innerWidth
-  container.height = window.innerHeight
-  renderer.setSize(renderer.domElement.width, renderer.domElement.height)
-  uniforms.u_resolution.value.x = renderer.domElement.width
-  uniforms.u_resolution.value.y = renderer.domElement.height
-}, false)
+window.addEventListener('resize', setSize, false)
 
 document.addEventListener('mousemove', (event: MouseEvent): void => {
   mouseX = event.pageX
   mouseY = event.pageY
 }, false)
 
+scene.add(mesh)
+setSize()
 animate()
+
+function setSize (): void {
+  container.width = window.innerWidth
+  container.height = window.innerHeight
+  renderer.setSize(renderer.domElement.width, renderer.domElement.height)
+  uniforms.u_resolution.value.x = renderer.domElement.width
+  uniforms.u_resolution.value.y = renderer.domElement.height
+}
 
 function animate () {
   requestAnimationFrame(animate)
