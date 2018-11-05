@@ -14,10 +14,21 @@
     canvas {
       display: block;
     }
+
+    .range {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
   </style>
 </head>
 <body>
   <canvas id="canvas"></canvas>
+  <div class="range">
+    <input id="range_r" type="range" min="0" max="1" step="0.01">
+    <input id="range_g" type="range" min="0" max="1" step="0.01">
+    <input id="range_b" type="range" min="0" max="1" step="0.01">
+  </div>
   <script src="./js/bundle.js"></script>
 </body>
 </html>
